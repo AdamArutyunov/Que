@@ -9,6 +9,8 @@ MP = 10
 
 def count_intervals(min_val, max_val):
     dif = max_val - min_val
+    if min_val == 0:
+        min_val = 1
     rel_dif = dif / min_val
     point_dif = rel_dif * MP
     if point_dif > MP:
@@ -26,7 +28,7 @@ time_interval = 10
 conn = sqlite3.connect("Que.db")
 PQLE = PyQL(conn, "Que")
 
-if True:
+while True:
     data = PQLE.select("cashboxes")
     clicks = list(map(lambda x: x[1], data))
     points = []
@@ -48,10 +50,10 @@ if True:
         point = points[i]
         PQLE.update("cashboxes", "status", round(point), [f"id = {data[i][0]}"])
 
-    # PQLE.update("cashboxes", "clicks", 0)
+    PQLE.update("cashboxes", "clicks", 0)
     PQLE.commit()
 
-    #time.sleep(time_interval)
+    time.sleep(time_interval)
 
 
 conn.close()

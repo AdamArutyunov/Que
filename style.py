@@ -4,8 +4,10 @@ QMainWindow {
     font-family: “ALato”
 }
 
-QDialog {
+QInputDialog {
     background-color: white;
+    width: 150px;
+    height: 50px;
 }
 
 QLabel {
@@ -16,9 +18,10 @@ QPushButton {
     background-color: white;
     color: #0084FF;
     border: 2px solid #0084FF;
-    border-radius: 30px;
-    font-size: 50px;
-    min-height: 150px;
+    border-radius: 15px;
+    font-size: 15px;
+    min-height: 30px;
+    padding: 0 25px;
 }
 
 QPushButton:!enabled {
@@ -31,6 +34,12 @@ QPushButton:!enabled {
 QPushButton:pressed {
     background-color: #0084FF;
     color: white;
+}
+
+QPushButton#plus_button {
+    min-height: 150px;
+    font-size: 50px;
+    border-radius: 50px;
 }
 
 QLayout {
