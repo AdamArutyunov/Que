@@ -14,6 +14,10 @@ QLabel {
     font-size: 25px;
 }
 
+QLabel#points_label {
+    font-size: 65px;
+}
+
 QPushButton {
     background-color: white;
     color: #0084FF;

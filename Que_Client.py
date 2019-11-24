@@ -1,7 +1,7 @@
 import sys
 import sqlite3
 from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QComboBox, QMessageBox
-from PyQt5.QtWidgets import QInputDialog
+from PyQt5.QtWidgets import QInputDialog, QWidget
 from PyQt5.QtGui import QFontDatabase, QFont
 from PyQt5.QtCore import QTimer
 from PyQL import PyQL
@@ -9,7 +9,7 @@ from PyQt5 import uic
 from style import style
 
 
-class Cashbox(QMainWindow):
+class QueCashboxInterface(QMainWindow):
     def __init__(self):
         super().__init__()
         uic.loadUi("CashboxWindow.ui", self)
@@ -64,6 +64,6 @@ fontstr = QFontDatabase.applicationFontFamilies(fid)[0]
 font = QFont(fontstr)
 app.setFont(font)
 
-ex = Cashbox()
+ex = QueCashboxInterface()
 
 sys.exit(app.exec())
