@@ -1,6 +1,6 @@
 import sys
 import sqlite3
-from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget
+from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QLabel
 from PyQt5.QtGui import QFontDatabase, QFont, QPainter, QColor, QPen
 from PyQt5.QtCore import Qt, QTimer
 from PyQL import PyQL
@@ -61,10 +61,12 @@ class QueVisual(QMainWindow):
     def __init__(self):
         super().__init__()
 
-        self.resize(850, 280)
+        self.resize(850, 350)
         self.setWindowTitle("Визуализация")
 
         self.data = PQLE.select("cashboxes")
+        self.warning_label = QLabel(self)
+        self.warning_label.setGeometry(10, 275, 800, 100)
 
         self.cashboxes = {}
         
@@ -74,8 +76,57 @@ class QueVisual(QMainWindow):
             self.cashboxes[d[0]].move(x * 200, 10)
             x += 1
 
+        self.timer = QTimer(self)
+        self.timer.timeout.connect(self.check_warning)
+        self.timer.start(100)
+
+        self.min_x = -1
+        self.max_x = -1
+
         self.show()
 
+    def check_warning(self):
+        self.data = PQLE.select("cashboxes")
+        min_value = min(self.data, key=lambda x: x[2])
+        max_value = max(self.data, key=lambda x: x[2])
+        if max_value[2] - min_value[2] >= 5:
+            max_name = max_value[3]
+            min_name = min_value[3]
+            max_id = max_value[0]
+            min_id = min_value[1]
+            max_i = list(self.data).index(max_value)
+            min_i = list(self.data).index(min_value)
+
+            text = f"""Покупатели с {max_name}! Перейдите на {min_name}."""
+            self.warning_label.setText(text)
+
+            self.min_x = 200 * min_i + 118
+            self.max_x = 200 * max_i + 118
+        else:
+            self.warning_label.setText("")
+            self.min_x = -1
+            self.max_x = -1
+
+        self.repaint()
+
+
+    def paintEvent(self, event):
+        qp = QPainter()
+        qp.begin(self)
+        qp.setPen(QPen(Qt.red, 3))
+        if self.min_x == self.max_x == -1:
+            return
+
+        h = 250
+        qp.drawLine(self.max_x, h, self.min_x, h)
+        if self.max_x < self.min_x:
+            qp.drawLine(self.min_x, h, self.min_x - 30, h - 10)
+            qp.drawLine(self.min_x, h, self.min_x - 30, h + 10)
+        else:
+            qp.drawLine(self.min_x, h, self.min_x + 30, h - 10)
+            qp.drawLine(self.min_x, h, self.min_x + 30, h + 10)
+        qp.end()
+        
 
 def excepthook(type, value, tback):
     sys.__excepthook__(type, value, tback)
