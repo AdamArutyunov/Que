@@ -127,23 +127,23 @@ class QueVisual(QMainWindow):
             qp.drawLine(self.min_x, h, self.min_x + 30, h + 10)
         qp.end()
         
+if __name__ == "__main__":
+    def excepthook(type, value, tback):
+        sys.__excepthook__(type, value, tback)
+    sys.excepthook = excepthook
 
-def excepthook(type, value, tback):
-    sys.__excepthook__(type, value, tback)
-sys.excepthook = excepthook
 
+    conn = sqlite3.connect("Que.db")
+    PQLE = PyQL(conn, "Que")
 
-conn = sqlite3.connect("Que.db")
-PQLE = PyQL(conn, "Que")
+    app = QApplication(sys.argv)
+    app.setStyleSheet(style)
 
-app = QApplication(sys.argv)
-app.setStyleSheet(style)
+    fid = QFontDatabase.addApplicationFont("fonts/Lato-Regular.ttf")  # Replace with your path
+    fontstr = QFontDatabase.applicationFontFamilies(fid)[0]
+    font = QFont(fontstr)
+    app.setFont(font)
 
-fid = QFontDatabase.addApplicationFont("fonts/Lato-Regular.ttf")  # Replace with your path
-fontstr = QFontDatabase.applicationFontFamilies(fid)[0]
-font = QFont(fontstr)
-app.setFont(font)
+    ex = QueVisual()
 
-ex = QueVisual()
-
-sys.exit(app.exec())
+    sys.exit(app.exec())

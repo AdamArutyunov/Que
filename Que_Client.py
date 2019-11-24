@@ -52,18 +52,18 @@ class QueCashboxInterface(QMainWindow):
     def update_n(self):
         self.label.setText(f"Проходов за текущий период: {self.n}")
 
+if __name__ == "__main__":
+    conn = sqlite3.connect("Que.db")
+    PQLE = PyQL(conn, "Que")
 
-conn = sqlite3.connect("Que.db")
-PQLE = PyQL(conn, "Que")
+    app = QApplication(sys.argv)
+    app.setStyleSheet(style)
 
-app = QApplication(sys.argv)
-app.setStyleSheet(style)
+    fid = QFontDatabase.addApplicationFont("fonts/Lato-Regular.ttf")  # Replace with your path
+    fontstr = QFontDatabase.applicationFontFamilies(fid)[0]
+    font = QFont(fontstr)
+    app.setFont(font)
 
-fid = QFontDatabase.addApplicationFont("fonts/Lato-Regular.ttf")  # Replace with your path
-fontstr = QFontDatabase.applicationFontFamilies(fid)[0]
-font = QFont(fontstr)
-app.setFont(font)
+    ex = QueCashboxInterface()
 
-ex = QueCashboxInterface()
-
-sys.exit(app.exec())
+    sys.exit(app.exec())
